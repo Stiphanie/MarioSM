@@ -21,6 +21,8 @@ actions_map = {'noop':0, 'down':32, 'up':16, 'jump':1, 'spin':3,
 # Vamos usar apenas um subconjunto
 actions_list = [66,130,128,131,386]
 
+main_actions = [1, 16, 32, 64, 128, 256]
+
 # faz as ações até mudar de estado
 def performAction(a, rle):
   reward = 0
