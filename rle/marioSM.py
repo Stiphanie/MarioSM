@@ -42,23 +42,25 @@ def choose_action(result):
 
 
 def eval_genome(genome, config):
+    global rle
     TIMEOUT = 100
     runs_per_net = 1 #DEFINIR DEPOIS
     net = neat.nn.FeedForwardNetwork.create(genome, config)
-    fitnesses = []
-    rle = loadInterface(True)
+    fitnesses = []    
     timeout = TIMEOUT
     #print("-------ENTROU GENOMA---------")
     #print(genome)
+
     for runs in range(runs_per_net):
         # Run the given simulation for up to num_steps time steps.
+        rle.saveState()
         state, xi, y, l1x, l1y = getInputs(rle.getRAM()) #features
         x = xi
         rightmost = xi
         fitness = 0.0
         while not rle.game_over() and timeout > 0:
             #print(x, y)
-            print(l1x, l1y)
+            #print(l1x, l1y)
             state_aggr = list(state)
             state_aggr.append(y)
             #print(state_aggr)
@@ -83,6 +85,7 @@ def eval_genome(genome, config):
             fitness = float(x - xi)
             #print("mama meus ovo")
         fitnesses.append(fitness)
+        rle.loadState()
         #print("morreu")
     # The genome's fitness is its worst performance across all runs.
     #print("-------SAIU GENOMA---------")
@@ -101,6 +104,7 @@ def eval_genomes(genomes, config):
 def run(i):
     # Load the config file, which is assumed to live in
     # the same directory as this script.
+    global rle
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, 'config')
     config_path = 'config'
@@ -113,7 +117,7 @@ def run(i):
     #pop = neat.Population(config)
     #stats = neat.StatisticsReporter()
     #pop.add_reporter(stats)
-    
+    rle = loadInterface(True)
     pop = None
     if(i == 0):
         pop = neat.Population(config)
@@ -135,13 +139,17 @@ def run(i):
 
     #return winner
 
-if __name__ == '__main__':
+def main():
     i = 0
     while(True):
         run(i)
         i += 1
     #print(r)
     print("-----------CABO SABOSTA-------")
+
+if __name__ == '__main__':
+    main()
+
 
 
 

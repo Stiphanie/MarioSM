@@ -8,7 +8,7 @@ no_fitness_termination = False
 [DefaultGenome]
 num_inputs              = 170
 num_hidden              = 1
-num_outputs             = 1
+num_outputs             = 6
 initial_connection      = partial_direct 0.5
 feed_forward            = True
 compatibility_disjoint_coefficient    = 1.0
