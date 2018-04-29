@@ -1,14 +1,14 @@
 [NEAT]
 fitness_criterion     = max
-fitness_threshold     = 3000
+fitness_threshold     = 5000
 pop_size              = 50
 reset_on_extinction   = True
-no_fitness_termination = False
+no_fitness_termination = True
 
 [DefaultGenome]
-num_inputs              = 170
-num_hidden              = 1
-num_outputs             = 6
+num_inputs              = 169
+num_hidden              = 0
+num_outputs             = 7
 initial_connection      = partial_direct 0.5
 feed_forward            = True
 compatibility_disjoint_coefficient    = 1.0
@@ -21,7 +21,7 @@ activation_default      = sigmoid
 activation_options      = sigmoid
 activation_mutate_rate  = 0.0
 aggregation_default     = sum
-aggregation_options     = sum
+aggregation_options     = max
 aggregation_mutate_rate = 0.0
 bias_init_mean          = 0.0
 bias_init_stdev         = 1.0

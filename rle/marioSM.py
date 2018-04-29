@@ -1,19 +1,12 @@
 #!/usr/bin/env python
-# marioQLearning.py
-# Author: Fabrício Olivetti de França
-#
-# A simple Q-Learning Agent for Super Mario World
-# using RLE
 
 import sys
-from rle_python_interface.rle_python_interface import RLEInterface
-import numpy as np
-from numpy.random import uniform, choice, random
 import neat
-
 import time
 from rominfo import *
 from utils import *
+#from memory_profiler import profile
+
 
 def choose_action(result):
     '''
@@ -28,8 +21,8 @@ def choose_action(result):
         return 131
     else:
         return 386
+    
     '''
-   
     action = 0
     #print(result)
     #print(len([x for x in result if x > 0.4]))
@@ -39,8 +32,8 @@ def choose_action(result):
             action += main_actions[i]
     #print(action)
     return action
-
-
+    
+#@profile
 def eval_genome(genome, config):
     global rle
     TIMEOUT = 100
@@ -48,31 +41,21 @@ def eval_genome(genome, config):
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     fitnesses = []    
     timeout = TIMEOUT
-    #print("-------ENTROU GENOMA---------")
-    #print(genome)
 
     for runs in range(runs_per_net):
-        # Run the given simulation for up to num_steps time steps.
         rle.saveState()
         state, xi, y, l1x, l1y = getInputs(rle.getRAM()) #features
         x = xi
         rightmost = xi
         fitness = 0.0
         while not rle.game_over() and timeout > 0:
-            #print(x, y)
-            #print(l1x, l1y)
+
             state_aggr = list(state)
-            state_aggr.append(y)
-            #print(state_aggr)
-            #state = list(state)
             inputs = (state_aggr)
             result = net.activate(inputs) #Roda na net do NEAT
 
-            #print(result)
             action = choose_action(result)
 
-            #print(action)
-            # Testa
             reward = performAction(action, rle)
             state, x, y, l1x, l1y = getInputs(rle.getRAM())
 
@@ -85,70 +68,62 @@ def eval_genome(genome, config):
             fitness = float(x - xi)
             #print("mama meus ovo")
         fitnesses.append(fitness)
+        #rle.loadROM('super_mario_world.smc', 'snes') -> É mais rápido, mas consome memória do mesmo jeito
         rle.loadState()
-        #print("morreu")
-    # The genome's fitness is its worst performance across all runs.
-    #print("-------SAIU GENOMA---------")
     fitness = max(fitnesses)
-    #print(fitness)
-    #print(type(fitness))
     return fitness
+
 
 def eval_genomes(genomes, config):
     for genome_id, genome in genomes:
         genome.fitness = eval_genome(genome, config)
-        print("\n")
+        #print("\n")
         print(genome.fitness)
-        print("\n")
+        #print("\n")
 
-def run(i):
+
+def run(generation = 0, numIterations = 10000):
     # Load the config file, which is assumed to live in
     # the same directory as this script.
     global rle
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, 'config')
-    config_path = 'config'
+    #config_path = 'config'
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
 
 
-    check_point = neat.Checkpointer(generation_interval=1)    
-    #pop = neat.Population(config)
+    check_point = neat.Checkpointer(generation_interval=5)    
     #stats = neat.StatisticsReporter()
     #pop.add_reporter(stats)
     rle = loadInterface(True)
     pop = None
-    if(i == 0):
+    if(generation == 0):
+        # Inicia nova população
         pop = neat.Population(config)
     else:
-        filename = 'neat-checkpoint-' + str(i)
+        # Restaura população de um checkpoint
+        filename = 'neat-checkpoint-' + str(generation)
         pop = check_point.restore_checkpoint(filename)
+
     pop.add_reporter(neat.StdOutReporter(True))
     pop.add_reporter(check_point)
-    winner = pop.run(eval_genomes)
-        
+    winner = pop.run(eval_genomes, numIterations)        
 
     #pe = neat.ParallelEvaluator(4, eval_genomes)
     #print("------------ENTROU WINNER--------------")
     
     #print("------------SAIU WINNER--------------")
     # Save the winner.
-    #with open('winner-feedforward', 'wb') as f:
-        #pickle.dump(winner, f)
+    with open('winner-feedforward', 'wb') as f:
+        pickle.dump(winner, f)
+        print("Winner salvo")
 
     #return winner
 
-def main():
-    i = 0
-    while(True):
-        run(i)
-        i += 1
-    #print(r)
-    print("-----------CABO SABOSTA-------")
-
 if __name__ == '__main__':
-    main()
+    run()
 
 
 
