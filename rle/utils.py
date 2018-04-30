@@ -23,9 +23,10 @@ actions_map = {'noop':0, 'down':32, 'up':16, 'jump':1, 'spin':3,
 # Vamos usar apenas um subconjunto
 actions_list = [66,130,128,131,386]
 
-main_actions = [1, 2, 16, 32, 64, 128, 256]
 
-#main_actions = [1, 2, 64, 128, 256] # Sem Up e Down
+#main_actions = [1, 2, 16, 32, 64, 128, 256] # Botões do controle
+
+main_actions = [1, 2, 64, 128, 256] # Botões do controle (Sem Up e Down)
 
 # faz as ações até mudar de estado
 def performAction(a, rle):
@@ -91,3 +92,12 @@ def getStoredQ(fname='Q.pkl'):
   if os.path.exists(fname):
     Q, ep, maxActions = pickle.load(open(fname, 'rb'))
   return Q, ep, maxActions 
+
+
+ 
+## Para o avaliador paralelo
+def constructRleSet(n = 4):
+    rle_set = set()
+    for _ in range(n):
+        rle_set.add(loadInterface(False))
+    return rle_set

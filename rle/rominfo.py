@@ -109,7 +109,7 @@ def getInputs(ram, radius=6):
           if withinLimits(j, s1, s2, radius, maxlen):
             inputs[j + s1*(radius*2 + 1) + s2] = -1
     j = j + 1
-  return inputs, marioX, marioY, layer1x, layer1y
+  return inputs, marioX, marioY
   
 # Recupera o estado atual como uma string
 def getState(ram, radius):
