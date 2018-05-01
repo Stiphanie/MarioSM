@@ -88,7 +88,7 @@ def run(generation = 0, num_iterations = None):
         print("winner_config salvo")
 
 if __name__ == '__main__':
-    run(53, 1)
+    run()
 
 
 
