@@ -1,6 +1,6 @@
 [NEAT]
 fitness_criterion     = max
-fitness_threshold     = 3000
+fitness_threshold     = 4800
 pop_size              = 300
 reset_on_extinction   = True
 no_fitness_termination = False
@@ -18,7 +18,7 @@ conn_delete_prob        = 0.4
 node_add_prob           = 0.4
 node_delete_prob        = 0.4
 activation_default      = sigmoid
-activation_options      = sigmoid relu 
+activation_options      = sigmoid relu gauss 
 activation_mutate_rate  = 0.001
 aggregation_default     = sum
 aggregation_options     = max sum

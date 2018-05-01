@@ -5,6 +5,7 @@ import neat
 import time
 from rominfo import *
 from utils import *
+from multiprocessing import Process, Pipe
 #from memory_profiler import profile
 
 
@@ -65,17 +66,22 @@ def eval_genome(genome, config):
         #rle.loadROM('super_mario_world.smc', 'snes') -> É mais rápido, mas consome memória do mesmo jeito
         #rle.loadState()
     fitness = max(fitnesses)
+    with open('fitness_parallel.txt', 'a') as f:
+        text = str(fitness) + "\n"
+        f.write(text)
     print("FITNESS: ", fitness, "\n")
-
+    #connection.send(fitness)
+    #connection.close()
     return fitness
 
 
 def eval_genomes(genomes, config):
     for genome_id, genome in genomes:
-        genome.fitness = eval_genome(genome, config)
-        #print("\n")
-        print(genome.fitness)
-        #print("\n")
+        parent_conn, child_conn = Pipe(False)
+        p = Process(target=eval_genome, args=(genome, config, child_conn))
+        p.start()
+        genome.fitness = parent_conn.recv()
+        #print(genome.fitness)
 
 
 def run(generation = 0, numIterations = None):
@@ -103,7 +109,7 @@ def run(generation = 0, numIterations = None):
     #pop.add_reporter(stats)
     pe = neat.ParallelEvaluator(None, eval_genome)
     winner = pop.run(pe.evaluate, numIterations)        
-
+    print(winner)
     # Save the winner.
     with open('winner-feedforward', 'wb') as f:
         pickle.dump(winner, f)
@@ -112,7 +118,7 @@ def run(generation = 0, numIterations = None):
     #return winner
 
 if __name__ == '__main__':
-    run(19, 1)
+    run(53, 1)
 
 
 

@@ -14,10 +14,7 @@ def play(genome, config):
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     rle = loadInterface(True)
     state, xi, y = getInputs(rle.getRAM())
-    #TIMEOUT = 100
-    #timeout = TIMEOUT
     while not rle.game_over():
-        x_begin = x
         result = net.activate(state) #Roda na net do NEAT
         action = choose_action(result)
         reward = performAction(action, rle)
