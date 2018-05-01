@@ -88,8 +88,13 @@ def run(generation = 0, num_iterations = None):
         pickle.dump(winner, f)
         print("Winner salvo")
 
+    # Salva o config usado
+    with open('winner_config', 'wb') as f:
+        pickle.dump(config, f)
+        print("winner_config salvo")
+
 if __name__ == '__main__':
-    run(53, 1)
+    run()
 
 
 

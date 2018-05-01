@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-##########################################################################
-#### FUNCIONA APENAS COM A VERSÃO DO NEAT-PYTHON PRESENTE NESTA PASTA ####
-##########################################################################
+##############################################################################
+#### FUNCIONA APENAS COM A VERSÃO DO NEAT-PYTHON PRESENTE NESTE DIRETÓRIO ####
+##############################################################################
 
 import sys
 import neat
@@ -81,6 +81,11 @@ def run(generation = 0, num_iterations = None):
     with open('winner', 'wb') as f:
         pickle.dump(winner, f)
         print("Winner salvo")
+
+    # Salva o config usado
+    with open('winner_config', 'wb') as f:
+        pickle.dump(config, f)
+        print("winner_config salvo")
 
 if __name__ == '__main__':
     run(53, 1)

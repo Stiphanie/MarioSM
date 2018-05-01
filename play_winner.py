@@ -22,12 +22,15 @@ def play(genome, config):
     print("Distance:", x - xi)
 
 def main():
+    winner_genome = None
+    config = None
     with open('winner', 'rb') as f:
         winner_genome = pickle.load(f)
-        config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                             neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                             'config')
-        play(winner_genome, config)
+    
+    with open('winner_config', 'rb') as f:
+        config = pickle.load(f)
+
+    play(winner_genome, config)
 
 if __name__ == '__main__':
     main()
