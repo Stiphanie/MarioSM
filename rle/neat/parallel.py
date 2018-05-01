@@ -14,7 +14,7 @@ class ParallelEvaluator(object):
         self.num_workers = num_workers
         self.eval_function = eval_function
         self.timeout = timeout
-        self.pool = Pool(num_workers)
+        self.pool = Pool(processes = num_workers, maxtasksperchild = 1)
 
     def __del__(self):
         self.pool.close() # should this be terminate?

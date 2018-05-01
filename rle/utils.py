@@ -26,7 +26,9 @@ actions_list = [66,130,128,131,386]
 
 #main_actions = [1, 2, 16, 32, 64, 128, 256] # Botões do controle
 
-main_actions = [1, 2, 64, 128, 256] # Botões do controle (Sem Up e Down)
+main_actions = [1, 2, 32, 64, 128, 256] # Botões do controle (sem UP)
+
+#main_actions = [1, 2, 64, 128, 256] # Botões do controle (Sem Up e Down)
 
 # faz as ações até mudar de estado
 def performAction(a, rle):

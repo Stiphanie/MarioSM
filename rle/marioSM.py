@@ -101,7 +101,7 @@ def run(generation = 0, numIterations = None):
     pop.add_reporter(neat.StdOutReporter(True))
     pop.add_reporter(check_point)
     #pop.add_reporter(stats)
-    pe = neat.ParallelEvaluator(4, eval_genome)
+    pe = neat.ParallelEvaluator(None, eval_genome)
     winner = pop.run(pe.evaluate, numIterations)        
 
     # Save the winner.
@@ -112,7 +112,7 @@ def run(generation = 0, numIterations = None):
     #return winner
 
 if __name__ == '__main__':
-    run()
+    run(19, 1)
 
 
 

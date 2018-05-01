@@ -13,12 +13,25 @@ def choose_action(result):
 def play(genome, config):
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     rle = loadInterface(True)
+    state, x, y = getInputs(rle.getRAM())
+    xi = x
+    TIMEOUT = 100
+    timeout = TIMEOUT
     while not rle.game_over():
-        state, xi, y = getInputs(rle.getRAM())
+        x_begin = x
         result = net.activate(state) #Roda na net do NEAT
         action = choose_action(result)
         reward = performAction(action, rle)
         state, x, y = getInputs(rle.getRAM())
+        if (x_begin - x) == 0:
+            timeout -= 1
+        else:
+            timeout = TIMEOUT
+        
+        if timeout < 0:
+            performAction(1, rle)
+            
+    print(x - xi)
 
 def main():
     with open('winner-feedforward', 'rb') as f:
@@ -26,6 +39,7 @@ def main():
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                              neat.DefaultSpeciesSet, neat.DefaultStagnation,
                              'config')
+        print(winner_genome)
         play(winner_genome, config)
 
 if __name__ == '__main__':
