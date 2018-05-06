@@ -79,16 +79,12 @@ def run(generation = 0, num_iterations = None):
 
     # Save the winner.
     with open('winner', 'wb') as f:
-        pickle.dump(winner, f)
+        winner_tuple = (winner, config, main_actions)
+        pickle.dump(winner_tuple, f)
         print("Winner salvo")
 
-    # Salva o config usado
-    with open('winner_config', 'wb') as f:
-        pickle.dump(config, f)
-        print("winner_config salvo")
-
 if __name__ == '__main__':
-    run()
+    run(53, 1)
 
 
 
